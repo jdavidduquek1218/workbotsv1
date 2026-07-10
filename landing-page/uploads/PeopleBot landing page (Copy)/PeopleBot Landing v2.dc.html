@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80"><rect width="120" height="80" fill="#09090B"></rect><path d="M35 26 H85 A6 6 0 0 1 91 32 V42 A6 6 0 0 1 85 48 H55 L45 56 L46 48 H35 A6 6 0 0 1 29 42 V32 A6 6 0 0 1 35 26 Z" fill="#4F46E5"></path><path d="M38 37 H48 L51 30 L57 44 L60 37 H70" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path><text x="60" y="68" font-family="sans-serif" font-size="7" font-weight="bold" fill="rgba(255,255,255,.5)" text-anchor="middle">PeopleBot</text></svg></template>
+
+<helmet>
+<title>PeopleBot — Gestión de personal operativo vía WhatsApp</title>
+<meta name="description" content="7 chatbots de IA que automatizan la gestión de tu personal operativo a través de WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #FAFAF8; color: #09090B; -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4 { font-family: 'Space Grotesk', sans-serif; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes floatCard { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-7px)} }
+  .org-card { transition: box-shadow 0.25s, transform 0.25s; }
+  .org-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.13) !important; transform: translateY(-4px) !important; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none !important; }
+    .nav-toggle { display: flex !important; }
+    .two-col { grid-template-columns: 1fr !important; gap: 32px !important; }
+    .three-col { grid-template-columns: 1fr !important; }
+    .four-col { grid-template-columns: 1fr 1fr !important; }
+    .bot-bottom { grid-template-columns: 1fr 1fr !important; max-width: 100% !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .reto-grid { grid-template-columns: 1fr !important; }
+    .reto-col { padding: 56px 24px !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,.06) !important; }
+    .acc-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .acc-tabs button { min-width: 130px !important; font-size: 12px !important; padding: 12px 10px !important; }
+    .acc-panel { grid-template-columns: 1fr !important; }
+    .acc-panel > div { border-right: none !important; border-bottom: 1px solid #E4E4E7 !important; }
+    .footer-checks { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .sol-card { min-height: 420px !important; }
+    .sol-card-pad { padding: 32px 24px 16px !important; }
+    .contact-row { grid-template-columns: 1fr !important; }
+    section, footer { padding-left: 20px !important; padding-right: 20px !important; }
+    .inner { padding-left: 0 !important; padding-right: 0 !important; }
+  }
+</style>
+<script>
+function scrollToForm(b) {
+  if (b) { var s=document.getElementById('chatbotSelect'); if(s) s.value=b; }
+  var el=document.getElementById('waitlist');
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  return false;
+}
+function selectBot(b) {
+  var s=document.getElementById('chatbotSelect'); if(s) s.value=b;
+  var el=document.getElementById('waitlist'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showBot(idx) {
+  for(var i=0;i<5;i++){
+    var t=document.getElementById('tab-'+i), p=document.getElementById('panel-'+i);
+    if(!t||!p) continue;
+    if(i===idx){
+      t.style.color='#09090B'; t.style.borderBottom='2px solid #09090B'; t.style.fontWeight='700';
+      p.style.display='grid';
+    } else {
+      t.style.color='#71717A'; t.style.borderBottom='2px solid transparent'; t.style.fontWeight='500';
+      p.style.display='none';
+    }
+  }
+}
+function toggleNav() {
+  var m=document.getElementById('navMobile');
+  if(m) m.style.display = m.style.display==='flex'?'none':'flex';
+}
+window.addEventListener('scroll', function() {
+  var nav=document.getElementById('mainNav');
+  var logo=document.getElementById('navLogoText');
+  var links=document.querySelectorAll('.nav-link-item');
+  var spans=document.querySelectorAll('.hamburger-span');
+  if(!nav) return;
+  var scrolled = window.scrollY > 80;
+  nav.style.background = scrolled ? 'rgba(250,250,248,.96)' : 'transparent';
+  nav.style.backdropFilter = scrolled ? 'blur(16px)' : 'none';
+  nav.style.borderBottomColor = scrolled ? '#E4E4E7' : 'transparent';
+  if(logo) logo.style.color = scrolled ? '#09090B' : '#fff';
+  links.forEach(function(l,i){
+    if(i<links.length-1) l.style.color = scrolled ? '#52525B' : 'rgba(255,255,255,.65)';
+    else l.style.color = '#fff';
+  });
+  spans.forEach(function(s){ s.style.background = scrolled ? '#09090B' : '#fff'; });
+});
+</script>
+</helmet>
+
+<!-- ═══ NAV ═══ -->
+<nav id="mainNav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:transparent;border-bottom:1px solid transparent;transition:all .25s;">
+  <a href="#" style="display:flex;align-items:center;gap:9px;text-decoration:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 96 96"><path d="M28 14 H68 A18 18 0 0 1 86 32 V54 A18 18 0 0 1 68 72 H44 L26 86 L29 72 H28 A18 18 0 0 1 10 54 V32 A18 18 0 0 1 28 14 Z" fill="#4F46E5"></path><path d="M22 44 H37 L42 31 L51 57 L56 44 H74" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span id="navLogoText" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;color:#fff;transition:color .25s;">PeopleBot</span>
+  </a>
+  <div class="nav-links" style="display:flex;align-items:center;gap:2px;">
+    <a href="#chatbots" class="nav-link-item" style="font-size:14px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color .2s;">Chatbots</a>
+    <a href="#demo" class="nav-link-item" style="font-size:14px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color .2s;">Demo</a>
+    <a href="#caso" class="nav-link-item" style="font-size:14px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;padding:8px 14px;border-radius:8px;transition:color .2s;">Casos</a>
+    <a href="#waitlist" onclick="scrollToForm(null)" class="nav-link-item" style="background:#4F46E5;color:#fff !important;font-size:14px;font-weight:600;padding:9px 20px;border-radius:8px;text-decoration:none;margin-left:10px;transition:background .2s;" style-hover="background:#4338CA">Agendar demo</a>
+  </div>
+  <button onclick="toggleNav()" class="nav-toggle" style="display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;gap:5px;">
+    <span class="hamburger-span" style="width:22px;height:2px;background:#fff;border-radius:2px;display:block;transition:background .25s;"></span>
+    <span class="hamburger-span" style="width:22px;height:2px;background:#fff;border-radius:2px;display:block;transition:background .25s;"></span>
+    <span class="hamburger-span" style="width:22px;height:2px;background:#fff;border-radius:2px;display:block;transition:background .25s;"></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<div id="navMobile" style="display:none;position:fixed;top:64px;left:0;right:0;z-index:99;background:#09090B;border-bottom:1px solid rgba(255,255,255,.06);padding:16px 24px;flex-direction:column;gap:2px;">
+  <a href="#chatbots" onclick="toggleNav()" style="font-size:15px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:block;">Chatbots</a>
+  <a href="#demo" onclick="toggleNav()" style="font-size:15px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:block;">Demo</a>
+  <a href="#caso" onclick="toggleNav()" style="font-size:15px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:block;">Casos</a>
+  <a href="#waitlist" onclick="scrollToForm(null);toggleNav();" style="background:#4F46E5;color:#fff;font-size:15px;font-weight:600;padding:14px 20px;border-radius:10px;text-decoration:none;text-align:center;display:block;margin-top:10px;">Agendar mi demo</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section style="background:#09090B;padding:148px 24px 100px;text-align:center;position:relative;overflow:hidden;" data-screen-label="Hero">
+  <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:1000px;height:600px;background:radial-gradient(ellipse at 50% 0%,rgba(79,70,229,.22) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="max-width:840px;margin:0 auto;position:relative;animation:fadeUp .7s both;">
+    <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:6px 18px;margin-bottom:44px;background:rgba(255,255,255,.03);">
+      <span style="width:7px;height:7px;background:#25D366;border-radius:50%;animation:blink 2s infinite;display:inline-block;"></span>
+      <span style="font-size:13px;font-weight:500;color:rgba(255,255,255,.55);letter-spacing:.02em;">Demos disponibles · Agenda la tuya hoy</span>
+    </div>
+    
+    
+    <h1 style="font-size: clamp(52px,7.5vw,92px); font-weight: 700; line-height: 1.0; letter-spacing: -.03em; color: #fff; margin-bottom: 28px; text-wrap: balance; position: relative">Automatiza la gestión de tu personal operativo vía&nbsp;<span data-cc-id="cc-1" style="color: rgb(37, 211, 102);">WhatsApp</span></h1><p style="font-size:clamp(17px,2vw,21px);color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:52px;font-weight:400;">Reclutamiento, onboarding, clima, performance,&nbsp; tiempos, celebraciones y wiki —&nbsp; <br>en el canal que tu equipo <strong style="color:#fff;">ya usa todos los días.</strong></p><div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="#waitlist" onclick="scrollToForm(null)" style="background:#4F46E5;color:#fff;font-size:16px;font-weight:600;padding:16px 32px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 0 1px rgba(79,70,229,.4),0 4px 24px rgba(79,70,229,.25);transition:all .2s;" style-hover="background:#4338CA;transform:translateY(-1px)">Agendar mi demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+      <a href="#demo" style="font-size:15px;font-weight:500;color:rgba(255,255,255,.4);text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:color .2s;" style-hover="color:rgba(255,255,255,.8)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 8l6 4-6 4V8z" fill="currentColor"></path></svg> Ver demo</a>
+    </div>
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:80px;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);" class="stats-grid">
+      <div style="padding:22px 28px;text-align:center;border-right:1px solid rgba(255,255,255,.07);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:#fff;line-height:1;">7.5x</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.35);margin-top:5px;font-weight:500;">interacción vs email</div>
+      </div>
+      <div style="padding:22px 28px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:#25D366;line-height:1;">+80%</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.35);margin-top:5px;font-weight:500;">tasa de respuesta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EL RETO ═══ -->
+<section style="padding:0;background:#09090B;" data-screen-label="El Reto">
+  <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.06);" class="reto-grid">
+    <div style="padding:88px 60px;border-right:1px solid rgba(255,255,255,.06);" class="reto-col">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:#4F46E5;text-transform:uppercase;margin-bottom:28px;">El reto</p>
+      <h2 style="font-size:clamp(26px,2.8vw,38px);font-weight:700;color:#fff;line-height:1.28;text-wrap:balance;">Hoy las empresas ya no crecen inflando equipos — crecen <span style="color:#4F46E5;">automatizando lo repetitivo</span></h2>
+    </div>
+    <div style="padding:88px 60px;" class="reto-col">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.25);text-transform:uppercase;margin-bottom:28px;">El problema</p>
+      <h2 style="font-size:clamp(26px,2.8vw,38px);font-weight:700;color:#fff;line-height:1.28;text-wrap:balance;">Para el personal operativo y sin escritorio el reto es activarlos en los&nbsp;<span style="color: rgb(79, 70, 229);">procesos</span>&nbsp;y su&nbsp;<span style="color: rgb(79, 70, 229);">uso de la tecnología</span>... no usan el app o el software de HR.</h2>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LA SOLUCIÓN ═══ -->
+<section style="padding:100px 24px;background:#FAFAF8;" data-screen-label="La Solución">
+  <div style="max-width:1120px;margin:0 auto;">
+    <div style="margin-bottom:60px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:#4F46E5;text-transform:uppercase;margin-bottom:16px;">La solución</p>
+      <h2 style="font-size:clamp(30px,4vw,52px);font-weight:700;color:#09090B;line-height:1.1;letter-spacing:-.02em;max-width:680px;text-wrap:balance;">PeopleBot gestiona tu operación de personas en el chat que ya tienen abierto:&nbsp;<span style="color: rgb(37, 211, 102);">WhatsApp</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;" class="three-col">
+
+      <!-- Card 1: Manifesto oscuro -->
+      <div class="sol-card" style="background:#09090B;border-radius:18px;padding:44px 40px 48px;display:flex;flex-direction:column;min-height:500px;position:relative;overflow:hidden;">
+        <div style="position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(79,70,229,.28) 0%,transparent 68%);pointer-events:none;"></div>
+        <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(79,70,229,.1) 0%,transparent 70%);pointer-events:none;"></div>
+        <div>
+          <div style="width:40px;height:40px;background:rgba(79,70,229,.15);border:1px solid rgba(79,70,229,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:32px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7m0 9a2 2 0 100-4 2 2 0 000 4m-4 7v-1a4 4 0 018 0v1" stroke="#818CF8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+          <h3 style="font-size:21px;font-weight:700;color:#fff;margin-bottom:14px;line-height:1.3;">Somos especialistas en la automatización de la operación de personas aplicando IA</h3>
+          <p style="font-size:14px;color:rgba(255,255,255,.42);line-height:1.72;">Diseñamos chatbots entrenados específicamente para la gestión de personal operativo, no soluciones genéricas.</p>
+        </div>
+        <div style="margin-top:auto;padding-top:48px;display:flex;align-items:center;gap:10px;">
+          <div style="height:1px;flex:1;background:rgba(255,255,255,.07);"></div>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.18em;color:rgba(255,255,255,.18);text-transform:uppercase;">IA · Personas · WhatsApp</span>
+          <div style="height:1px;flex:1;background:rgba(255,255,255,.07);"></div>
+        </div>
+      </div>
+
+      <!-- Card 2: WhatsApp + teléfono flotante -->
+      <div class="sol-card" style="background:#fff;border:1px solid #E8E8E8;border-radius:18px;display:flex;flex-direction:column;min-height:500px;overflow:hidden;">
+        <div class="sol-card-pad" style="padding:44px 40px 20px;">
+          <div style="width:40px;height:40px;background:#F0FDF4;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:28px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.144 1.535 5.875L0 24l6.297-1.499A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.659-.504-5.191-1.383l-.371-.22-3.86.92.978-3.763-.241-.389A9.936 9.936 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"></path></svg>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:700;color:#25D366;line-height:1;margin-bottom:10px;letter-spacing:-.02em;">7.5x</div>
+          <h3 style="font-size:17px;font-weight:700;color:#09090B;margin-bottom:8px;line-height:1.35;">Más engagement usando el canal que tu equipo ya usa: WhatsApp</h3>
+          <p style="font-size:13px;color:#71717A;line-height:1.65;">Donde el email falla, WhatsApp convierte. Tus equipos operativos lo usan todo el día.</p>
+        </div>
+        <div style="height:220px;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(to bottom,#fff 0%,#E8FFF0 100%);padding:16px 0 0;overflow:hidden;">
+          <img src="uploads/Screenshot_2026-06-25_at_10.43.18_AM-removebg-preview.png" alt="WhatsApp ClimaBot" style="height:210px;width:auto;display:block;filter:drop-shadow(0 16px 40px rgba(0,0,0,.18));">
+        </div>
+      </div>
+
+      <!-- Card 3: Dashboard emergente -->
+      <div class="sol-card" style="background:#F7F7F8;border:1px solid #E8E8E8;border-radius:18px;display:flex;flex-direction:column;min-height:500px;overflow:hidden;">
+        <div class="sol-card-pad" style="padding:44px 40px 20px;">
+          <div style="width:40px;height:40px;background:#F5F3FF;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:28px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#7C3AED" stroke-width="1.8"></rect><rect x="14" y="3" width="7" height="7" rx="1" stroke="#7C3AED" stroke-width="1.8"></rect><rect x="3" y="14" width="7" height="7" rx="1" stroke="#7C3AED" stroke-width="1.8"></rect><path d="M14 17.5h7M17.5 14v7" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"></path></svg>
+          </div>
+          <h3 style="font-size:17px;font-weight:700;color:#09090B;margin-bottom:8px;line-height:1.35;">Los chatbots están conectados a una plataforma donde los líderes toman decisiones</h3>
+          <p style="font-size:13px;color:#71717A;line-height:1.65;">Dashboard con métricas de clima, asistencia, performance y encuestas — todo en un solo lugar.</p>
+        </div>
+        <div style="height:220px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;padding:0 24px;">
+          <img src="uploads/Screenshot_2026-06-25_at_10.43.22_AM-removebg-preview.png" alt="PeopleBot Dashboard" style="width:76%;height:auto;display:block;filter:drop-shadow(0 -4px 24px rgba(0,0,0,.10));border-radius:8px 8px 0 0;">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7 CHATBOTS ═══ -->
+<section id="chatbots" style="padding:100px 24px;background:#fff;" data-screen-label="Los 7 Chatbots">
+  <div style="max-width:1120px;margin:0 auto;">
+    <div style="margin-bottom:60px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:#4F46E5;text-transform:uppercase;margin-bottom:16px;">Tu equipo digital</p>
+      <h2 style="font-size:clamp(30px,4vw,52px);font-weight:700;color:#09090B;line-height:1.1;letter-spacing:-.02em;max-width:720px;text-wrap:balance;">Conoce tu equipo de agentes de HR y Ops en&nbsp;<span style="color: rgb(37, 211, 102); font-size: clamp(30px, 4vw, 52px); letter-spacing: -0.02em; text-wrap-mode: initial;">WhatsApp</span><span style="font-size: clamp(30px, 4vw, 52px); letter-spacing: -0.02em; text-wrap-mode: initial;">&nbsp;potenciados con IA</span><br></h2>
+    </div>
+    <!-- Row 1: 4 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:18px;" class="four-col">
+      <!-- 1. Reclutamiento -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 4.2s ease-in-out infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o1" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#7AABFF"/><stop offset="42%" stop-color="#2B5CE6"/><stop offset="100%" stop-color="#06104A"/></radialGradient><radialGradient id="o1v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o1e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o1s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#1A3ACA" flood-opacity="0.35"/></filter><radialGradient id="o1a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#5A88EE"/><stop offset="100%" stop-color="#06104A"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#1A40CC"/><circle cx="80" cy="10" r="7" fill="url(#o1)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o1)" filter="url(#o1s)"/><ellipse cx="52" cy="40" rx="30" ry="13" fill="white" fill-opacity="0.12" transform="rotate(-14 52 40)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o1v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o1e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o1e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#1A40CC"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o1a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o1a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o1a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o1a)" transform="rotate(8 146 165)"/><rect x="134" y="153" width="25" height="32" rx="3" fill="#EDE8DC"/><rect x="140" y="149" width="11" height="7" rx="3" fill="#C8B8A8"/><line x1="138" y1="162" x2="155" y2="162" stroke="#C0C0B0" stroke-width="1.5"/><line x1="138" y1="168" x2="155" y2="168" stroke="#C0C0B0" stroke-width="1.5"/><line x1="138" y1="174" x2="149" y2="174" stroke="#C0C0B0" stroke-width="1.5"/><polyline points="138,167 143,173 154,159" stroke="#00AA44" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o1)" filter="url(#o1s)"/><path d="M72,131 L80,148 L88,131" fill="none" stroke="white" stroke-width="7" stroke-linecap="round"/><path d="M76,131 L80,160 L84,131" fill="#CC2222" fill-opacity="0.9"/><polygon points="75,127 85,127 82,132 78,132" fill="#AA1111" fill-opacity="0.88"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Reclutamiento</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Filtra candidatos</li><li>Hace las preguntas clave</li><li>Agenda la entrevista</li></ul>
+        <button id="bot-btn-reclu" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+      <!-- 2. Onboarding -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 3.8s ease-in-out 0.6s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o2" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#6EDD8E"/><stop offset="42%" stop-color="#1A9E4A"/><stop offset="100%" stop-color="#063A18"/></radialGradient><radialGradient id="o2v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o2e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o2s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#0E6A30" flood-opacity="0.35"/></filter><radialGradient id="o2a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#48BB6A"/><stop offset="100%" stop-color="#063A18"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#10742A"/><circle cx="80" cy="10" r="7" fill="url(#o2)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o2)" filter="url(#o2s)"/><ellipse cx="52" cy="40" rx="30" ry="13" fill="white" fill-opacity="0.12" transform="rotate(-14 52 40)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o2v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o2e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o2e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#10742A"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o2a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o2a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o2a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o2a)" transform="rotate(8 146 165)"/><circle cx="148" cy="160" r="9" fill="none" stroke="#FFD700" stroke-width="3.5"/><circle cx="148" cy="160" r="4" fill="#3A2A00" fill-opacity="0.5"/><rect x="146" y="167" width="4" height="20" rx="2" fill="#FFD700"/><rect x="146" y="177" width="9" height="4" rx="1.5" fill="#FFD700"/><rect x="146" y="183" width="7" height="4" rx="1.5" fill="#FFD700"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o2)" filter="url(#o2s)"/><path d="M64,132 Q80,155 96,132" fill="none" stroke="#10742A" stroke-width="9" stroke-linecap="round"/><path d="M68,132 Q80,150 92,132" fill="none" stroke="#1A9E4A" stroke-width="5" stroke-linecap="round"/><rect x="62" y="158" width="36" height="20" rx="10" fill="rgba(0,0,0,0.18)"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Onboarding Offboarding</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Envía el paso a paso de ingreso</li><li>Firma contratos</li><li>Acompaña la salida</li></ul>
+        <button id="bot-btn-onbo" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+      <!-- 3. Encuestas y Clima -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 4.5s ease-in-out 1.1s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o3" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#C8D4E0"/><stop offset="42%" stop-color="#6A7A8A"/><stop offset="100%" stop-color="#1A2A38"/></radialGradient><radialGradient id="o3v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o3e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o3s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#3A4A5A" flood-opacity="0.35"/></filter><radialGradient id="o3a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#A0AEBC"/><stop offset="100%" stop-color="#1A2A38"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#4A5A6A"/><circle cx="80" cy="10" r="7" fill="url(#o3)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o3)" filter="url(#o3s)"/><ellipse cx="52" cy="40" rx="30" ry="13" fill="white" fill-opacity="0.12" transform="rotate(-14 52 40)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o3v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o3e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o3e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><circle cx="64" cy="74" r="17" fill="none" stroke="#C8D4E0" stroke-width="2.5" stroke-opacity="0.55"/><circle cx="96" cy="74" r="17" fill="none" stroke="#C8D4E0" stroke-width="2.5" stroke-opacity="0.55"/><line x1="81" y1="74" x2="79" y2="74" stroke="#C8D4E0" stroke-width="2.5" stroke-opacity="0.55"/><line x1="33" y1="73" x2="47" y2="73" stroke="#C8D4E0" stroke-width="2.5" stroke-opacity="0.45"/><line x1="113" y1="73" x2="127" y2="73" stroke="#C8D4E0" stroke-width="2.5" stroke-opacity="0.45"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#4A5A6A"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o3a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o3a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o3a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o3a)" transform="rotate(8 146 165)"/><rect x="134" y="151" width="25" height="33" rx="3" fill="#EAE8DC"/><rect x="140" y="147" width="11" height="7" rx="3" fill="#C0B8A8"/><rect x="138" y="161" width="4" height="14" rx="1" fill="#6A7A8A"/><rect x="144" y="157" width="4" height="18" rx="1" fill="#6A7A8A"/><rect x="150" y="164" width="4" height="11" rx="1" fill="#6A7A8A"/><polyline points="139,161 146,157 152,164" stroke="#44AAFF" stroke-width="1.5" fill="none" stroke-linecap="round"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o3)" filter="url(#o3s)"/><rect x="58" y="147" width="9" height="9" rx="2" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/><polyline points="59,152 61,154 66,148" stroke="#6EDD8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="58" y="160" width="9" height="9" rx="2" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/><polyline points="59,165 61,167 66,161" stroke="#6EDD8E" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="70" y="149" width="22" height="2" rx="1" fill="rgba(255,255,255,0.18)"/><rect x="70" y="162" width="18" height="2" rx="1" fill="rgba(255,255,255,0.18)"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Encuestas y Clima</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Lanza las encuestas solo</li><li>+80% tasa de respuesta vs correo</li><li>Entrega reportes con insights</li></ul>
+        <button id="bot-btn-clima" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+      <!-- 4. Performance -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 4.0s ease-in-out 1.7s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o4" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#FFB86A"/><stop offset="42%" stop-color="#E07820"/><stop offset="100%" stop-color="#5A2800"/></radialGradient><radialGradient id="o4v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o4e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o4s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#AA4400" flood-opacity="0.35"/></filter><radialGradient id="o4a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#E89E50"/><stop offset="100%" stop-color="#5A2800"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#AA4400"/><circle cx="80" cy="10" r="7" fill="url(#o4)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o4)" filter="url(#o4s)"/><ellipse cx="52" cy="40" rx="30" ry="13" fill="white" fill-opacity="0.12" transform="rotate(-14 52 40)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o4v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o4e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o4e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#AA4400"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o4a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o4a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o4a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o4a)" transform="rotate(8 146 165)"/><rect x="138" y="173" width="16" height="5" rx="2" fill="#FFD700"/><rect x="143" y="168" width="6" height="7" rx="1" fill="#EEB800"/><path d="M136,156 Q136,168 144,168 Q152,168 152,156 Z" fill="#FFD700"/><path d="M136,156 L134,151 L140,156" fill="#FFD700"/><path d="M152,156 L154,151 L148,156" fill="#FFD700"/><ellipse cx="144" cy="156" rx="8" ry="5" fill="#EEB800"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o4)" filter="url(#o4s)"/><polygon points="80,146 82,152 88,152 83,156 85,162 80,158 75,162 77,156 72,152 78,152" fill="#FFD700"/><polygon points="80,148 81.5,152.5 86,152.5 82.5,155 83.5,160 80,157 76.5,160 77.5,155 74,152.5 78.5,152.5" fill="#FFEE88"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Performance</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Evaluaciones periódicas de desempeño</li><li>Genera reportes para los líderes</li><li>Dispara recordatorios a quien falte</li></ul>
+        <button id="bot-btn-perf" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+    </div>
+    <!-- Row 2: 3 centered -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:885px;margin:0 auto;" class="bot-bottom">
+      <!-- 5. Celebraciones -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 3.6s ease-in-out 0.3s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 10 160 210" width="115" height="138" style="overflow:visible;"><defs><radialGradient id="o5" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#FF8090"/><stop offset="42%" stop-color="#E03048"/><stop offset="100%" stop-color="#5A000E"/></radialGradient><radialGradient id="o5v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o5e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o5s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#AA1030" flood-opacity="0.35"/></filter><radialGradient id="o5a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#EE6070"/><stop offset="100%" stop-color="#5A000E"/></radialGradient></defs><rect x="48" y="14" width="6" height="6" rx="1" fill="#FFD700" transform="rotate(25 51 17)"/><rect x="62" y="18" width="5" height="5" rx="1" fill="#44AAFF" transform="rotate(-15 64 20)"/><rect x="98" y="15" width="6" height="6" rx="1" fill="#FF88AA" transform="rotate(40 101 18)"/><rect x="112" y="20" width="5" height="5" rx="1" fill="#88FF44" transform="rotate(-30 114 22)"/><circle cx="42" cy="24" r="2.5" fill="#FF44AA"/><circle cx="118" cy="22" r="2" fill="#FFD700"/><polygon points="80,14 60,50 100,50" fill="#FFD700"/><polygon points="80,14 60,50 70,50" fill="#FF8800" fill-opacity="0.4"/><line x1="60" y1="50" x2="100" y2="50" stroke="#FF4400" stroke-width="3"/><circle cx="80" cy="14" r="4" fill="#FF4400"/><ellipse cx="80" cy="217" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="22" y="50" width="116" height="96" rx="40" fill="url(#o5)" filter="url(#o5s)"/><rect x="35" y="66" width="90" height="64" rx="26" fill="url(#o5v)"/><rect x="35" y="66" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="98" rx="11" ry="15" fill="url(#o5e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="98" rx="11" ry="15" fill="url(#o5e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><rect x="70" y="143" width="20" height="13" rx="5" fill="#AA1030"/><ellipse cx="17" cy="168" rx="9" ry="12" fill="url(#o5a)" transform="rotate(-12 17 168)"/><ellipse cx="14" cy="183" rx="12" ry="15" fill="url(#o5a)" transform="rotate(-8 14 183)"/><ellipse cx="143" cy="168" rx="9" ry="12" fill="url(#o5a)" transform="rotate(12 143 168)"/><ellipse cx="146" cy="183" rx="12" ry="15" fill="url(#o5a)" transform="rotate(8 146 183)"/><rect x="34" y="154" width="92" height="66" rx="26" fill="url(#o5)" filter="url(#o5s)"/><circle cx="66" cy="175" r="10" fill="#FFD700" fill-opacity="0.72"/><circle cx="80" cy="171" r="10" fill="#FF88AA" fill-opacity="0.72"/><circle cx="94" cy="175" r="10" fill="#44AAFF" fill-opacity="0.72"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Celebraciones</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Recuerda cumpleaños y fechas clave</li><li>Coordina regalos con el proveedor</li><li>Fortalece la cultura sin carga manual</li></ul>
+        <button id="bot-btn-cele" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+      <!-- 6. Control de Tiempos -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 4.3s ease-in-out 0.9s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o6" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#66DDDD"/><stop offset="42%" stop-color="#1AA0A0"/><stop offset="100%" stop-color="#063C3C"/></radialGradient><radialGradient id="o6v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o6e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o6s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#0E6A6A" flood-opacity="0.35"/></filter><radialGradient id="o6a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#44CCCC"/><stop offset="100%" stop-color="#063C3C"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#0A7070"/><circle cx="80" cy="10" r="7" fill="url(#o6)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o6)" filter="url(#o6s)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o6v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o6e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o6e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#0A7070"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o6a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o6a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o6a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o6a)" transform="rotate(8 146 165)"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o6)" filter="url(#o6s)"/><circle cx="80" cy="158" r="17" fill="#063C3C" fill-opacity="0.82"/><circle cx="80" cy="158" r="17" fill="none" stroke="rgba(102,221,221,0.45)" stroke-width="2"/><line x1="80" y1="143" x2="80" y2="147" stroke="rgba(255,255,255,0.45)" stroke-width="2"/><line x1="80" y1="169" x2="80" y2="173" stroke="rgba(255,255,255,0.45)" stroke-width="2"/><line x1="65" y1="158" x2="69" y2="158" stroke="rgba(255,255,255,0.45)" stroke-width="2"/><line x1="91" y1="158" x2="95" y2="158" stroke="rgba(255,255,255,0.45)" stroke-width="2"/><line x1="80" y1="158" x2="80" y2="148" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="80" y1="158" x2="88" y2="163" stroke="rgba(102,221,221,0.9)" stroke-width="2" stroke-linecap="round"/><circle cx="80" cy="158" r="2.5" fill="white"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Control de Tiempos</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Registra ingresos y salidas con georref.</li><li>Sin apps adicionales ni hardware extra</li><li>Reportes de asistencia en tiempo real</li></ul>
+        <button id="bot-btn-tiempo" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+      <!-- 7. Wiki Interna -->
+      <div class="org-card" style="background:#fff;border-radius:18px;padding:32px 20px 24px;text-align:center;box-shadow:0 2px 20px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.05);display:flex;flex-direction:column;">
+        <div style="animation:floatCard 4.6s ease-in-out 1.5s infinite;display:inline-block;margin-bottom:4px;">
+          <svg viewBox="0 0 160 200" width="115" height="144" style="overflow:visible;"><defs><radialGradient id="o7" cx="28%" cy="22%" r="75%"><stop offset="0%" stop-color="#D490FF"/><stop offset="42%" stop-color="#8B2AE6"/><stop offset="100%" stop-color="#2A0858"/></radialGradient><radialGradient id="o7v" cx="32%" cy="24%" r="72%"><stop offset="0%" stop-color="#2C2C2C"/><stop offset="100%" stop-color="#040404"/></radialGradient><radialGradient id="o7e" cx="42%" cy="35%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#C8D8EC"/><stop offset="100%" stop-color="#708090"/></radialGradient><filter id="o7s" x="-30%" y="-15%" width="160%" height="145%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#5A1AAA" flood-opacity="0.35"/></filter><radialGradient id="o7a" cx="30%" cy="28%" r="70%"><stop offset="0%" stop-color="#BB66EE"/><stop offset="100%" stop-color="#2A0858"/></radialGradient></defs><ellipse cx="80" cy="197" rx="46" ry="5" fill="black" fill-opacity="0.1"/><rect x="77" y="12" width="6" height="18" rx="3" fill="#5A1AAA"/><circle cx="80" cy="10" r="7" fill="url(#o7)"/><circle cx="77" cy="7" r="2.5" fill="white" fill-opacity="0.25"/><rect x="22" y="26" width="116" height="96" rx="40" fill="url(#o7)" filter="url(#o7s)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="url(#o7v)"/><rect x="35" y="42" width="90" height="64" rx="26" fill="none" stroke="#222" stroke-width="1.5"/><ellipse cx="64" cy="74" rx="11" ry="15" fill="url(#o7e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><ellipse cx="96" cy="74" rx="11" ry="15" fill="url(#o7e)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/><circle cx="64" cy="74" r="17" fill="none" stroke="#D490FF" stroke-width="3" stroke-opacity="0.6"/><circle cx="96" cy="74" r="17" fill="none" stroke="#D490FF" stroke-width="3" stroke-opacity="0.6"/><line x1="81" y1="74" x2="79" y2="74" stroke="#D490FF" stroke-width="3" stroke-opacity="0.6"/><line x1="33" y1="73" x2="47" y2="73" stroke="#D490FF" stroke-width="2.5" stroke-opacity="0.45"/><line x1="113" y1="73" x2="127" y2="73" stroke="#D490FF" stroke-width="2.5" stroke-opacity="0.45"/><rect x="70" y="119" width="20" height="13" rx="5" fill="#5A1AAA"/><ellipse cx="17" cy="150" rx="9" ry="12" fill="url(#o7a)" transform="rotate(-12 17 150)"/><ellipse cx="14" cy="165" rx="12" ry="15" fill="url(#o7a)" transform="rotate(-8 14 165)"/><ellipse cx="143" cy="150" rx="9" ry="12" fill="url(#o7a)" transform="rotate(12 143 150)"/><ellipse cx="146" cy="165" rx="12" ry="15" fill="url(#o7a)" transform="rotate(8 146 165)"/><rect x="34" y="130" width="92" height="66" rx="26" fill="url(#o7)" filter="url(#o7s)"/><circle cx="80" cy="157" r="15" fill="#2A0858" fill-opacity="0.72"/><circle cx="80" cy="157" r="15" fill="none" stroke="rgba(212,144,255,0.38)" stroke-width="1.5"/><circle cx="80" cy="150" r="2.5" fill="#D490FF" fill-opacity="0.82"/><rect x="78" y="154" width="4" height="9" rx="2" fill="#D490FF" fill-opacity="0.82"/></svg>
+        </div>
+        <h3 style="font-size:15px;font-weight:800;color:#111;margin:8px 0 14px;line-height:1.3;">Agente de<br>Wiki Interna</h3>
+        <ul style="text-align:left;margin:0 0 20px;padding:0 0 0 14px;color:#5A6A7A;font-size:12.5px;line-height:2;flex:1;"><li>Contesta preguntas sobre procesos internos</li><li>Aprende de Notion, Docs o PDF</li><li>Libera tiempo de tu equipo de RRHH</li></ul>
+        <button id="bot-btn-wiki" style="background:#111;color:white;border:none;border-radius:100px;padding:12px 0;font-size:13px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;">Me interesa →</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px;">
+      <a href="#waitlist" onclick="scrollToForm(null)" style="background:#09090B;color:#fff;font-size:15px;font-weight:600;padding:14px 32px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s;" style-hover="background:#4F46E5">Agendar mi demo →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ACCORDION ═══ -->
+<section style="padding:100px 24px;background:#FAFAF8;" data-screen-label="Así Funciona">
+  <div style="max-width:1120px;margin:0 auto;">
+    <div style="margin-bottom:52px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:#4F46E5;text-transform:uppercase;margin-bottom:16px;">En profundidad</p>
+      <h2 style="font-size:clamp(30px,4vw,48px);font-weight:700;color:#09090B;line-height:1.1;letter-spacing:-.02em;">Así funciona cada agente</h2>
+    </div>
+    <div style="display:flex;border-bottom:1px solid #E4E4E7;background:transparent;" class="acc-tabs">
+      <button onclick="showBot(0)" id="tab-0" style="flex:1;min-width:130px;padding:14px 14px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:#09090B;border-bottom:2px solid #09090B;white-space:nowrap;transition:all .2s;">🌡️ Clima</button>
+      <button onclick="showBot(1)" id="tab-1" style="flex:1;min-width:130px;padding:14px 14px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:#71717A;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;">🔍 Reclutamiento</button>
+      <button onclick="showBot(2)" id="tab-2" style="flex:1;min-width:130px;padding:14px 14px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:#71717A;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;">📊 Performance</button>
+      <button onclick="showBot(3)" id="tab-3" style="flex:1;min-width:130px;padding:14px 14px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:#71717A;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;">📚 Wiki Interna</button>
+      <button onclick="showBot(4)" id="tab-4" style="flex:1;min-width:150px;padding:14px 14px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;background:transparent;color:#71717A;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;">⏱️ Control de Tiempos</button>
+    </div>
+    <div style="background:#fff;border:1px solid #E4E4E7;border-top:none;border-radius:0 0 16px 16px;overflow:hidden;">
+      <!-- Panel 0: Clima -->
+      <div id="panel-0" class="acc-panel" style="display:grid;grid-template-columns:1fr 1fr;">
+        <div style="padding:48px 40px;border-right:1px solid #E4E4E7;">
+          <div style="display:inline-flex;align-items:center;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:6px;padding:4px 12px;margin-bottom:20px;"><span style="font-size:11px;font-weight:700;color:#16A34A;text-transform:uppercase;letter-spacing:.08em;">Encuestas y Clima</span></div>
+          <h3 style="font-size:clamp(20px,2.2vw,28px);font-weight:700;color:#09090B;margin-bottom:12px;line-height:1.25;">Reduce la rotación del talento</h3>
+          <p style="font-size:15px;color:#71717A;line-height:1.65;margin-bottom:28px;">Identifica lo que valoran y los principales dolores de tu equipo y obten sugerencias accionables antes que sea tarde.</p>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:36px;height:36px;min-width:36px;background:#F0FDF4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;color:#16A34A;">+80%</div><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Tasa de respuesta</strong><span style="font-size:13px;color:#71717A;">vs formularios por correo</span></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:36px;height:36px;min-width:36px;background:#F0FDF4;border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round"></path></svg></div><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Disparo automático</strong><span style="font-size:13px;color:#71717A;">según fechas definidas</span></div></div>
+            <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:36px;height:36px;min-width:36px;background:#F0FDF4;border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 17v-2m3 2v-4m3 4v-6" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round"></path></svg></div><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Informes accionables</strong><span style="font-size:13px;color:#71717A;">por área, listos para el líder</span></div></div>
+          </div>
+          <button id="panel-cta-0" style="background:#09090B;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:background .2s;" style-hover="background:#4F46E5">Quiero este agente →</button>
+        </div>
+        <div style="padding:40px;display:flex;align-items:center;justify-content:center;background:#F4F4F5;">
+          <div style="width:235px;background:#E5DDD5;border-radius:20px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.15);border:3px solid #1a1a1a;">
+            <div style="background:#128C7E;border-radius:10px 10px 0 0;padding:10px 12px;display:flex;align-items:center;gap:8px;margin:-10px -10px 0;"><div style="width:26px;height:26px;background:#4F6AF5;border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 96 96"><path d="M28 14 H68 A18 18 0 0 1 86 32 V54 A18 18 0 0 1 68 72 H44 L26 86 L29 72 H28 A18 18 0 0 1 10 54 V32 A18 18 0 0 1 28 14 Z" fill="rgba(255,255,255,.25)"></path><path d="M22 44 H37 L42 31 L51 57 L56 44 H74" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div><div style="font-size:10px;font-weight:700;color:#fff;">ClimaBot</div><div style="font-size:8px;color:rgba(255,255,255,.7);">en línea</div></div></div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;">
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¡Hola! 👋 Soy el bot que mide el Clima de [Empresa]. Tus respuestas son anónimas, así que puedes responder con completa tranquilidad y sinceridad.</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¿De 1 a 10 qué tanto recomendarías a [Empresa] para trabajar a un amigo o familiar? Responde con un número del 1 al 10.</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:22%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">7</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¿Por qué elegiste ese número? Si lo deseas, agrega también comentarios, ideas o sugerencias.</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:95%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;line-height:1.4;">Creo que el área de despacho necesita ampliar su zona de descanso o variar los horarios</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Panel 1: Reclutamiento -->
+      <div id="panel-1" class="acc-panel" style="display:none;grid-template-columns:1fr 1fr;">
+        <div style="padding:40px;display:flex;align-items:center;justify-content:center;background:#F4F4F5;order:1;">
+          <div style="width:235px;background:#E5DDD5;border-radius:20px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.15);border:3px solid #1a1a1a;">
+            <div style="background:#128C7E;border-radius:10px 10px 0 0;padding:10px 12px;display:flex;align-items:center;gap:8px;margin:-10px -10px 0;"><div style="width:26px;height:26px;background:#5B6CF9;border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 96 96"><path d="M28 14 H68 A18 18 0 0 1 86 32 V54 A18 18 0 0 1 68 72 H44 L26 86 L29 72 H28 A18 18 0 0 1 10 54 V32 A18 18 0 0 1 28 14 Z" fill="rgba(255,255,255,.25)"></path><path d="M22 44 H37 L42 31 L51 57 L56 44 H74" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div><div style="font-size:10px;font-weight:700;color:#fff;">Recruiter Bot</div><div style="font-size:8px;color:rgba(255,255,255,.7);">en línea</div></div></div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;">
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">Hola 👋 Soy el bot de reclutamiento de [Empresa]. ¿Has tenido experiencia en el cargo? (cuéntanos cuánto tiempo)</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:60%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">Más de 2 años</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¿Tienes disponibilidad para tener turnos rotativos?</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:25%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">Sí</p></div>
+              <div style="background:#EEF2FF;border-radius:8px;padding:7px 9px;max-width:95%;border:1px solid #C7D2FE;"><p style="font-size:9px;color:#4F46E5;font-weight:600;line-height:1.4;">¡Perfecto! ✅ Cumples con el perfil. Te agendamos una entrevista — selecciona el horario que te quede mejor 📅</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:48px 40px;order:2;">
+          <div style="display:inline-flex;align-items:center;background:#EEF2FF;border:1px solid #C7D2FE;border-radius:6px;padding:4px 12px;margin-bottom:20px;"><span style="font-size:11px;font-weight:700;color:#4F46E5;text-transform:uppercase;letter-spacing:.08em;">Reclutamiento</span></div>
+          <h3 style="font-size:clamp(20px,2.2vw,28px);font-weight:700;color:#09090B;margin-bottom:12px;line-height:1.25;">Ahorra tiempo y entrevista solo a los candidatos prefiltrados</h3>
+          <p style="font-size:15px;color:#71717A;line-height:1.65;margin-bottom:28px;">Automatiza la primera entrevista y deja que el bot filtre candidatos antes de que lleguen a ti.</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;">
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Hace las preguntas clave del cargo en la conversación</strong><span style="font-size:13px;color:#71717A;">sin formularios ni correos</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Analiza datos para filtrar candidatos</strong><span style="font-size:13px;color:#71717A;">según los criterios del cargo</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Agenda la entrevista automáticamente</strong><span style="font-size:13px;color:#71717A;">con los candidatos que pasan el filtro</span></div></div>
+          </div>
+          <button id="panel-cta-1" style="background:#09090B;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:background .2s;" style-hover="background:#4F46E5">Hablemos de mi caso →</button>
+        </div>
+      </div>
+      <!-- Panel 2: Performance -->
+      <div id="panel-2" class="acc-panel" style="display:none;grid-template-columns:1fr 1fr;">
+        <div style="padding:48px 40px;border-right:1px solid #E4E4E7;">
+          <div style="display:inline-flex;align-items:center;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:6px;padding:4px 12px;margin-bottom:20px;"><span style="font-size:11px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.08em;">Performance</span></div>
+          <h3 style="font-size:clamp(20px,2.2vw,28px);font-weight:700;color:#09090B;margin-bottom:12px;line-height:1.25;">Garantiza que tengas al equipo correcto en los asientos correctos</h3>
+          <p style="font-size:15px;color:#71717A;line-height:1.65;margin-bottom:28px;">Promueve a tus top performers y gestiona a los low performers.</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;">
+            <div style="display:flex;gap:12px;"><span style="color:#7C3AED;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Evaluaciones periódicas de desempeño</strong><span style="font-size:13px;color:#71717A;">lanzadas automáticamente por WhatsApp</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#7C3AED;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Genera reportes para los líderes</strong><span style="font-size:13px;color:#71717A;">con insights por colaborador</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#7C3AED;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Dispara recordatorios a quien falte por responder</strong><span style="font-size:13px;color:#71717A;">aumentando la participación</span></div></div>
+          </div>
+          <button id="panel-cta-2" style="background:#09090B;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:background .2s;" style-hover="background:#7C3AED">Quiero mi demo →</button>
+        </div>
+        <div style="padding:40px;display:flex;align-items:center;justify-content:center;background:#F4F4F5;">
+          <div style="width:235px;background:#E5DDD5;border-radius:20px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.15);border:3px solid #1a1a1a;">
+            <div style="background:#128C7E;border-radius:10px 10px 0 0;padding:10px 12px;display:flex;align-items:center;gap:8px;margin:-10px -10px 0;"><div style="width:26px;height:26px;background:#7C3AED;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">📊</div><div><div style="font-size:10px;font-weight:700;color:#fff;">Performance Bot</div><div style="font-size:8px;color:rgba(255,255,255,.7);">en línea</div></div></div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;">
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¡Hola! 👋 Soy el bot que mide el desempeño en [Empresa]. Esta es la oportunidad para retroalimentar a las personas de tu equipo.</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">Hoy es el turno para que evalúes a tu compañero [Nombre]. ¿Ha sido [1: nunca – 5: siempre] un buen colega? <span style="color:#6B7280;font-style:italic;">(🔒 Anónima)</span></p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:22%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">3</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¿Cómo crees que esta persona puede mejorar? Sugiere qué debería empezar a hacer [Start 🟢] o dejar de hacer [Stop 🔴]. <span style="color:#4F46E5;font-style:italic;">(👤 No anónima)</span></p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:90%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;line-height:1.4;">Podría dar sugerencias específicas en vez de solo decir qué no le gusta del trabajo de sus compañeros</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Panel 3: Wiki -->
+      <div id="panel-3" class="acc-panel" style="display:none;grid-template-columns:1fr 1fr;">
+        <div style="padding:40px;display:flex;align-items:center;justify-content:center;background:#F4F4F5;order:1;">
+          <div style="width:235px;background:#E5DDD5;border-radius:20px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.15);border:3px solid #1a1a1a;">
+            <div style="background:#128C7E;border-radius:10px 10px 0 0;padding:10px 12px;display:flex;align-items:center;gap:8px;margin:-10px -10px 0;"><div style="width:26px;height:26px;background:#6366F1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">📚</div><div><div style="font-size:10px;font-weight:700;color:#fff;">Wiki Interna</div><div style="font-size:8px;color:rgba(255,255,255,.7);">en línea</div></div></div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;">
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¡Hola! 👋 Soy el bot de Wiki interna de [Empresa]. ¿Cuál es tu pregunta? 🤔</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:88%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">¿Dónde se deben enviar las facturas electrónicas?</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">Las facturas electrónicas deben ser enviadas al correo: facturacion@[empresa].com 📧</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;margin-bottom:5px;">¿Ahora qué quieres hacer?</p><div style="display:flex;gap:4px;flex-wrap:wrap;"><span style="background:#EEF2FF;color:#4F46E5;font-size:8px;font-weight:600;padding:4px 8px;border-radius:100px;border:1px solid #C7D2FE;">Tengo otra duda 🤔</span><span style="background:#F0FDF4;color:#16A34A;font-size:8px;font-weight:600;padding:4px 8px;border-radius:100px;border:1px solid #BBF7D0;">Finalizar ✅</span></div></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:6px 9px;max-width:38%;align-self:flex-end;"><p style="font-size:9.5px;color:#09090B;">Finalizar ✅</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:48px 40px;order:2;">
+          <div style="display:inline-flex;align-items:center;background:#EEF2FF;border:1px solid #C7D2FE;border-radius:6px;padding:4px 12px;margin-bottom:20px;"><span style="font-size:11px;font-weight:700;color:#4F46E5;text-transform:uppercase;letter-spacing:.08em;">Wiki Interna</span></div>
+          <h3 style="font-size:clamp(20px,2.2vw,28px);font-weight:700;color:#09090B;margin-bottom:12px;line-height:1.25;">El asistente virtual que sabe todo de tu empresa y responde al instante</h3>
+          <p style="font-size:15px;color:#71717A;line-height:1.65;margin-bottom:28px;">Capacita a los nuevos, responde dudas, da a conocer los beneficios y mucho más.</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;">
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Disponible 24/7</strong><span style="font-size:13px;color:#71717A;">sin depender de RRHH para resolver dudas</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Aprende de tus documentos</strong><span style="font-size:13px;color:#71717A;">ya sea Notion, Docs o PDF</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="color:#4F46E5;font-weight:700;font-size:16px;line-height:1.4;">→</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Libera tiempo de tu equipo de RRHH</strong><span style="font-size:13px;color:#71717A;">para las cosas que realmente importan</span></div></div>
+          </div>
+          <button id="panel-cta-3" style="background:#09090B;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:background .2s;" style-hover="background:#4F46E5">Reservar mi cupo →</button>
+        </div>
+      </div>
+      <!-- Panel 4: Control de Tiempos -->
+      <div id="panel-4" class="acc-panel" style="display:none;grid-template-columns:1fr 1fr;">
+        <div style="padding:48px 40px;border-right:1px solid #E4E4E7;">
+          <div style="display:inline-flex;align-items:center;background:#F0FDFA;border:1px solid #99F6E4;border-radius:6px;padding:4px 12px;margin-bottom:20px;"><span style="font-size:11px;font-weight:700;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;">Control de Tiempos</span></div>
+          <h3 style="font-size:clamp(20px,2.2vw,28px);font-weight:700;color:#09090B;margin-bottom:20px;line-height:1.25;">Valida la asistencia y ubicación de tu equipo en tiempo real, sin reportes manuales ni planillas</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;">
+            <div style="display:flex;gap:12px;"><span style="font-size:16px;line-height:1.4;">📍</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Registra ingresos y salidas con georreferenciación</strong><span style="font-size:13px;color:#71717A;">Ubicación validada en tiempo real</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="font-size:16px;line-height:1.4;">✅</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Valida la asistencia y ubicación de tu equipo</strong><span style="font-size:13px;color:#71717A;">Sin apps adicionales ni hardware extra</span></div></div>
+            <div style="display:flex;gap:12px;"><span style="font-size:16px;line-height:1.4;">🧾</span><div><strong style="color:#09090B;font-size:14px;display:block;margin-bottom:2px;">Genera reportes de novedades listos para nómina</strong><span style="font-size:13px;color:#71717A;">Sin planillas manuales ni errores de digitación</span></div></div>
+          </div>
+          <button id="panel-cta-4" style="background:#09090B;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;transition:background .2s;" style-hover="background:#0D9488">Quiero este agente →</button>
+        </div>
+        <div style="padding:40px;display:flex;align-items:center;justify-content:center;background:#F0FDFA;">
+          <div style="width:235px;background:#E5DDD5;border-radius:20px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.15);border:3px solid #1a1a1a;">
+            <div style="background:#128C7E;border-radius:10px 10px 0 0;padding:10px 12px;display:flex;align-items:center;gap:8px;margin:-10px -10px 0;"><div style="width:26px;height:26px;background:#0D9488;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;">⏱️</div><div><div style="font-size:10px;font-weight:700;color:#fff;">Bot Control de Tiempo</div><div style="font-size:8px;color:rgba(255,255,255,.7);">en línea</div></div></div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;padding-bottom:8px;">
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">¡Hola! 👋 Soy el bot de control de tiempo. Envía la foto del QR de la sede en la que estás 📍</p></div>
+              <div style="background:#DCF8C6;border-radius:8px 0 8px 8px;padding:8px;max-width:52%;align-self:flex-end;"><div style="width:52px;height:52px;background:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto;"><svg viewBox="0 0 40 40" width="44" height="44" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" fill="#09090B"></rect><rect x="5" y="5" width="8" height="8" rx="1" fill="#fff"></rect><rect x="7" y="7" width="4" height="4" fill="#09090B"></rect><rect x="24" y="2" width="14" height="14" rx="2" fill="#09090B"></rect><rect x="27" y="5" width="8" height="8" rx="1" fill="#fff"></rect><rect x="29" y="7" width="4" height="4" fill="#09090B"></rect><rect x="2" y="24" width="14" height="14" rx="2" fill="#09090B"></rect><rect x="5" y="27" width="8" height="8" rx="1" fill="#fff"></rect><rect x="7" y="29" width="4" height="4" fill="#09090B"></rect><rect x="24" y="18" width="4" height="4" fill="#09090B"></rect><rect x="30" y="18" width="4" height="4" fill="#09090B"></rect><rect x="24" y="24" width="4" height="4" fill="#09090B"></rect><rect x="30" y="24" width="4" height="4" fill="#09090B"></rect><rect x="24" y="30" width="4" height="4" fill="#09090B"></rect><rect x="30" y="30" width="10" height="4" fill="#09090B"></rect></svg></div><p style="font-size:8px;color:#555;text-align:center;margin-top:3px;">Foto QR 📷</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9.5px;color:#09090B;line-height:1.5;">✅ Se registra tu llegada a la sede de Laureles a las 13:08hs</p></div>
+              <div style="background:#fff;border-radius:0 8px 8px 8px;padding:6px 9px;max-width:95%;"><p style="font-size:9px;color:#09090B;line-height:1.5;font-style:italic;">"¿Has visto a un hombre diligente en su trabajo? Delante de los reyes estará..." — Rey Salomón. ¡Ten un buen día! 🌞</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO DEMO ═══ -->
+<section id="demo" style="padding:100px 24px;background:#09090B;text-align:center;" data-screen-label="Video Demo">
+  <div style="max-width:880px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.09);border-radius:100px;padding:5px 16px;margin-bottom:32px;background:rgba(255,255,255,.03);">
+      <span style="width:7px;height:7px;background:#EF4444;border-radius:50%;animation:blink 1s infinite;display:inline-block;"></span>
+      <span style="font-size:12px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase;">EN VIVO — Demo real de PeopleBot</span>
+    </div>
+    <h2 style="font-size:clamp(32px,4.5vw,56px);font-weight:700;color:#fff;margin-bottom:16px;line-height:1.1;letter-spacing:-.02em;">Velo en acción</h2>
+    <p style="font-size:17px;color:rgba(255,255,255,.38);margin-bottom:48px;line-height:1.55;">Mira cómo PeopleBot gestiona un proceso operativo desde WhatsApp.</p>
+    <div style="background:#111;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.05);margin-bottom:40px;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
+      <div style="width:68px;height:68px;background:rgba(79,70,229,.12);border:1.5px solid rgba(79,70,229,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z" fill="#4F46E5"></path></svg></div>
+      <p style="color:rgba(255,255,255,.25);font-size:14px;">Espacio para tu video demo</p>
+      <p style="color:rgba(255,255,255,.12);font-size:12px;">Reemplaza con un iframe de YouTube, Loom o tu video MP4</p>
+    </div>
+    <a href="#waitlist" onclick="scrollToForm(null)" style="background:#fff;color:#09090B;font-size:16px;font-weight:700;padding:16px 32px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;" style-hover="background:#F4F4F5">Agendar mi demo personalizada →</a>
+  </div>
+</section>
+
+<!-- ═══ CASO ALELUYA ═══ -->
+<section id="caso" style="padding:100px 24px;background:#FAFAF8;border-top:1px solid #E4E4E7;" data-screen-label="Caso Aleluya">
+  <div style="max-width:920px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:#4F46E5;text-transform:uppercase;margin-bottom:56px;text-align:center;">Caso de éxito</p>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:72px;align-items:center;" class="two-col">
+      <div>
+        <img src="uploads/Copy of sin_fondo_letra_negra (2).png" alt="Aleluya" style="height:26px;width:auto;display:block;margin-bottom:32px;filter:grayscale(1);opacity:.5;">
+        <h3 style="font-size:clamp(22px,2.5vw,32px);font-weight:700;color:#09090B;line-height:1.25;margin-bottom:24px;">Basado en el modelo de People que co-creamos en Aleluya durante 4 años</h3>
+        <p style="font-size:20px;color:#09090B;font-style:italic;line-height:1.55;margin-bottom:28px;font-weight:500;">"En mis 15 años de carrera, Aleluya ha sido el lugar donde me he sentido más feliz trabajando"</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="uploads/Screenshot 2026-06-24 at 3.41.19 PM.png" alt="Mauricio" style="width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid #E4E4E7;">
+          <span style="font-size:14px;color:#71717A;font-weight:500;">— Mauricio, colaborador Aleluya</span>
+        </div>
+      </div>
+      <div style="text-align:center;padding:40px 52px;background:#fff;border-radius:20px;border:1px solid #E4E4E7;box-shadow:0 4px 24px rgba(0,0,0,.04);flex-shrink:0;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:68px;font-weight:700;color:#4F46E5;line-height:1;">76.1</div>
+        <div style="font-size:12px;font-weight:700;color:#A1A1AA;text-transform:uppercase;letter-spacing:.12em;margin-top:8px;">eNPS promedio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WAITLIST ═══ -->
+<section id="waitlist" style="padding:120px 24px;background:#4F46E5;text-align:center;" data-screen-label="Agenda tu Demo">
+  <div style="max-width:580px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 16px;margin-bottom:32px;background:rgba(255,255,255,.08);">
+      <span style="width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 2s infinite;display:inline-block;"></span>
+      <span style="font-size:12px;font-weight:500;color:rgba(255,255,255,.7);">Demos personalizadas · Agenda la tuya hoy</span>
+    </div>
+    <h2 style="font-size:clamp(36px,5.5vw,64px);font-weight:700;color:#fff;line-height:1.0;letter-spacing:-.03em;margin-bottom:20px;text-wrap:balance;">Agenda tu demo personalizada.</h2>
+    <p style="font-size:18px;color:rgba(255,255,255,.6);line-height:1.55;margin-bottom:52px;">Completa el formulario y te contactamos para agendar una demo adaptada exactamente a tu necesidad.</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScA8apTL9ydDfxIYbQibrjhT1TpzY8QM49QB-MxW6EepYkh1A/viewform?usp=publish-editor" target="_blank" style="background:#fff;color:#4F46E5;font-size:18px;font-weight:700;padding:20px 48px;border-radius:12px;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .2s;box-shadow:0 4px 24px rgba(0,0,0,.12);" style-hover="transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.18)">Quiero mi demo <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+    <p style="font-size:13px;color:rgba(255,255,255,.35);margin-top:20px;">Formulario de Google · Sin spam · Demo personalizada</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer style="padding:80px 24px 48px;background:#09090B;" data-screen-label="Footer">
+  <div style="max-width:1120px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:64px;padding-bottom:64px;border-bottom:1px solid rgba(255,255,255,.06);" class="footer-checks">
+      <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:38px;height:38px;min-width:38px;background:rgba(79,70,229,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><p style="font-weight:600;color:#fff;font-size:15px;line-height:1.4;margin-top:8px;">Crecer sin inflar tu equipo</p></div>
+      <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:38px;height:38px;min-width:38px;background:rgba(37,211,102,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#25D366" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><p style="font-weight:600;color:#fff;font-size:15px;line-height:1.4;margin-top:8px;">Reducir carga operativa sin dependencia humana</p></div>
+      <div style="display:flex;gap:14px;align-items:flex-start;"><div style="width:38px;height:38px;min-width:38px;background:rgba(124,58,237,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><p style="font-weight:600;color:#fff;font-size:15px;line-height:1.4;margin-top:8px;">Proteger la rentabilidad</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;" class="contact-row">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="width:50px;height:50px;background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;min-width:50px;flex-shrink:0;">JD</div>
+        <div>
+          <p style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:16px;margin-bottom:2px;">Juan David Duque</p>
+          <p style="font-size:13px;color:rgba(255,255,255,.35);margin-bottom:10px;">People Lead — PeopleBot</p>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <a href="https://wa.me/573163046175" target="_blank" style="font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s;" style-hover="color:#25D366"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.144 1.535 5.875L0 24l6.297-1.499A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.659-.504-5.191-1.383l-.371-.22-3.86.92.978-3.763-.241-.389A9.936 9.936 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"></path></svg> WhatsApp</a>
+            <a href="https://www.linkedin.com/in/jdavidduquek/" target="_blank" style="font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s;" style-hover="color:#4F46E5"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path><circle cx="4" cy="4" r="2"></circle></svg> LinkedIn</a>
+          </div>
+        </div>
+      </div>
+      <a href="#waitlist" onclick="scrollToForm(null)" style="background:#4F46E5;color:#fff;font-size:15px;font-weight:600;padding:14px 28px;border-radius:10px;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;transition:background .2s;" style-hover="background:#4338CA">Agendar demo →</a>
+    </div>
+    <p style="text-align:center;font-size:12px;color:rgba(255,255,255,.15);margin-top:48px;">© 2026 PeopleBot · Gestión de personal operativo vía WhatsApp</p>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    // Accordion tabs
+    for (var i = 0; i < 5; i++) {
+      (function(idx) {
+        var btn = document.getElementById('tab-' + idx);
+        if (btn) btn.addEventListener('click', function() { showBot(idx); });
+      })(i);
+    }
+    // Bot card buttons
+    var botMap = [
+      ['bot-btn-reclu', 'Reclutamiento'],
+      ['bot-btn-onbo', 'Onboarding/Offboarding'],
+      ['bot-btn-clima', 'Encuestas y Clima'],
+      ['bot-btn-perf', 'Performance'],
+      ['bot-btn-cele', 'Celebraciones'],
+      ['bot-btn-tiempo', 'Control de Tiempos'],
+      ['bot-btn-wiki', 'Wiki Interna'],
+    ];
+    botMap.forEach(function(pair) {
+      var el = document.getElementById(pair[0]);
+      if (el) el.addEventListener('click', function() { selectBot(pair[1]); });
+    });
+    // Accordion panel CTAs
+    var panelBtns = [
+      ['panel-cta-0', 'Encuestas y Clima'],
+      ['panel-cta-1', 'Reclutamiento'],
+      ['panel-cta-2', 'Performance'],
+      ['panel-cta-3', 'Wiki Interna'],
+      ['panel-cta-4', 'Control de Tiempos'],
+    ];
+    panelBtns.forEach(function(pair) {
+      var el = document.getElementById(pair[0]);
+      if (el) el.addEventListener('click', function() { selectBot(pair[1]); });
+    });
+    // All scroll-to-form links
+    document.querySelectorAll('[data-scroll-form]').forEach(function(el) {
+      el.addEventListener('click', function(e) { e.preventDefault(); scrollToForm(null); });
+    });
+  }
+}
+</script>
+</body>
+</html>

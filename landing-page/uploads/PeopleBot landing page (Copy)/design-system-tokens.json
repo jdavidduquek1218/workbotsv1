@@ -1,0 +1,160 @@
+{
+  "name": "PeopleBot Design System",
+  "version": "1.0.0",
+  "colors": {
+    "primary": {
+      "indigo": "#4F46E5",
+      "indigoDark": "#4338CA",
+      "green": "#25D366"
+    },
+    "neutral": {
+      "black": "#09090B",
+      "dark": "#52525B",
+      "medium": "#71717A",
+      "light": "#E4E4E7",
+      "lightWarm": "#FAFAF8",
+      "white": "#FFFFFF"
+    },
+    "backgrounds": {
+      "dark": "#09090B",
+      "light": "#FAFAF8"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "'Space Grotesk', sans-serif",
+      "body": "'Plus Jakarta Sans', sans-serif"
+    },
+    "scales": {
+      "h1Hero": {
+        "size": "clamp(52px, 7.5vw, 92px)",
+        "weight": 700,
+        "lineHeight": 1.0,
+        "letterSpacing": "-0.03em"
+      },
+      "h2Large": {
+        "size": "clamp(30px, 4vw, 52px)",
+        "weight": 700,
+        "lineHeight": 1.1,
+        "letterSpacing": "-0.02em"
+      },
+      "h2Medium": {
+        "size": "clamp(26px, 2.8vw, 38px)",
+        "weight": 700,
+        "lineHeight": 1.28
+      },
+      "h3Card": {
+        "size": "15px",
+        "weight": 800,
+        "lineHeight": 1.3
+      },
+      "bodyLarge": {
+        "size": "clamp(17px, 2vw, 21px)",
+        "weight": 400,
+        "lineHeight": 1.55
+      },
+      "bodyRegular": {
+        "size": "14px",
+        "weight": 400,
+        "lineHeight": 1.72
+      },
+      "small": {
+        "size": "12px",
+        "weight": 500,
+        "lineHeight": 2
+      },
+      "micro": {
+        "size": "11px",
+        "weight": 700,
+        "lineHeight": 2,
+        "letterSpacing": "0.2em",
+        "textTransform": "uppercase"
+      }
+    }
+  },
+  "spacing": {
+    "heroTopPadding": "148px",
+    "sectionPadding": "100px 24px",
+    "cardPadding": "32px 20px 24px",
+    "largeSectionPadding": "88px 60px",
+    "gapLarge": "18px",
+    "gapMedium": "14px",
+    "gapSmall": "12px"
+  },
+  "components": {
+    "button": {
+      "primary": {
+        "background": "#4F46E5",
+        "color": "#FFFFFF",
+        "padding": "16px 32px",
+        "borderRadius": "10px",
+        "fontSize": "16px",
+        "fontWeight": 600,
+        "hoverBackground": "#4338CA",
+        "hoverTransform": "translateY(-1px)",
+        "boxShadow": "0 0 0 1px rgba(79,70,229,.4), 0 4px 24px rgba(79,70,229,.25)"
+      },
+      "secondary": {
+        "background": "#111111",
+        "color": "#FFFFFF",
+        "padding": "12px 0",
+        "borderRadius": "100px",
+        "fontSize": "13px",
+        "fontWeight": 700,
+        "width": "100%"
+      }
+    },
+    "card": {
+      "light": {
+        "background": "#FFFFFF",
+        "border": "1px solid #E4E4E7",
+        "borderRadius": "18px"
+      },
+      "dark": {
+        "background": "#09090B",
+        "border": "none",
+        "borderRadius": "18px"
+      },
+      "hoverEffect": {
+        "boxShadow": "0 12px 40px rgba(0,0,0,0.13)",
+        "transform": "translateY(-4px)",
+        "transition": "box-shadow 0.25s, transform 0.25s"
+      }
+    },
+    "badge": {
+      "borderRadius": "100px",
+      "padding": "6px 18px",
+      "border": "1px solid rgba(255,255,255,.1)",
+      "background": "rgba(255,255,255,.03)",
+      "fontSize": "13px",
+      "fontWeight": 500
+    }
+  },
+  "layout": {
+    "maxWidth": "1120px",
+    "containerPadding": "24px",
+    "gridGaps": {
+      "2col": "1fr 1fr",
+      "3col": "1fr 1fr 1fr",
+      "4col": "repeat(4, 1fr)"
+    }
+  },
+  "animations": {
+    "blink": {
+      "keyframes": "0%,100%{opacity:1} 50%{opacity:.3}",
+      "duration": "2s",
+      "timing": "infinite"
+    },
+    "fadeUp": {
+      "keyframes": "from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}",
+      "duration": "0.7s",
+      "timing": "ease"
+    },
+    "floatCard": {
+      "keyframes": "0%,100%{transform:translateY(0px)} 50%{transform:translateY(-7px)}",
+      "duration": "3.6s-4.6s",
+      "timing": "ease-in-out infinite"
+    }
+  },
+  "responsiveBoundary": "768px"
+}

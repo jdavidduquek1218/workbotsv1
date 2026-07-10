@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>PeopleBot Design System — Base Components</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #FAFAF8; color: #09090B; -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4 { font-family: 'Space Grotesk', sans-serif; }
+  a { color: #4F46E5; text-decoration: none; }
+  a:hover { color: #4338CA; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes floatCard { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-7px)} }
+</style>
+</helmet>
+
+<div style="padding: 60px 40px; max-width: 1400px; margin: 0 auto;">
+
+  <!-- COLOR PALETTE -->
+  <section style="margin-bottom: 80px;">
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Color Palette</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 60px;">
+      <!-- Primarios -->
+      <div>
+        <div style="width: 100%; height: 120px; background: #4F46E5; border-radius: 12px; margin-bottom: 12px;"></div>
+        <p style="font-weight: 600; color: #09090B; margin-bottom: 4px;">Indigo Primary</p>
+        <p style="font-size: 13px; color: #71717A;">#4F46E5</p>
+        <p style="font-size: 12px; color: #A1A1A1;">Buttons, CTA, highlights</p>
+      </div>
+      <div>
+        <div style="width: 100%; height: 120px; background: #25D366; border-radius: 12px; margin-bottom: 12px;"></div>
+        <p style="font-weight: 600; color: #09090B; margin-bottom: 4px;">Green (WhatsApp)</p>
+        <p style="font-size: 13px; color: #71717A;">#25D366</p>
+        <p style="font-size: 12px; color: #A1A1A1;">Accents, stats</p>
+      </div>
+      <div>
+        <div style="width: 100%; height: 120px; background: #09090B; border-radius: 12px; margin-bottom: 12px; border: 1px solid #E4E4E7;"></div>
+        <p style="font-weight: 600; color: #09090B; margin-bottom: 4px;">Black</p>
+        <p style="font-size: 13px; color: #71717A;">#09090B</p>
+        <p style="font-size: 12px; color: #A1A1A1;">Dark backgrounds</p>
+      </div>
+      <div>
+        <div style="width: 100%; height: 120px; background: #FAFAF8; border-radius: 12px; margin-bottom: 12px; border: 1px solid #E4E4E7;"></div>
+        <p style="font-weight: 600; color: #09090B; margin-bottom: 4px;">Warm White</p>
+        <p style="font-size: 13px; color: #71717A;">#FAFAF8</p>
+        <p style="font-size: 12px; color: #A1A1A1;">Body background</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section style="margin-bottom: 80px;">
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Typography</h2>
+    <div style="display: grid; gap: 32px;">
+      <div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(52px, 7.5vw, 92px); font-weight: 700; line-height: 1.0; letter-spacing: -0.03em; color: #09090B; margin-bottom: 8px;">H1 Hero</p>
+        <p style="font-size: 13px; color: #71717A;">Space Grotesk · Weight 700 · clamp(52px, 7.5vw, 92px)</p>
+      </div>
+      <div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 52px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: #09090B; margin-bottom: 8px;">H2 Large</p>
+        <p style="font-size: 13px; color: #71717A;">Space Grotesk · Weight 700 · clamp(30px, 4vw, 52px)</p>
+      </div>
+      <div>
+        <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(17px, 2vw, 21px); font-weight: 400; line-height: 1.55; color: #09090B; margin-bottom: 8px;">Body Large — This is the main body text for larger sections and descriptions.</p>
+        <p style="font-size: 13px; color: #71717A;">Plus Jakarta Sans · Weight 400 · clamp(17px, 2vw, 21px)</p>
+      </div>
+      <div>
+        <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 400; line-height: 1.72; color: #09090B; margin-bottom: 8px;">Body Regular — Standard text for cards and regular content areas.</p>
+        <p style="font-size: 13px; color: #71717A;">Plus Jakarta Sans · Weight 400 · 14px</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section style="margin-bottom: 80px;">
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Buttons</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px;">
+      <div>
+        <button style="background: #4F46E5; color: white; font-size: 16px; font-weight: 600; padding: 16px 32px; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0 0 0 1px rgba(79,70,229,.4), 0 4px 24px rgba(79,70,229,.25); width: 100%; transition: all 0.2s;">Primary CTA</button>
+        <p style="font-size: 13px; color: #71717A; margin-top: 16px;">Indigo · 16px · Weight 600</p>
+      </div>
+      <div>
+        <button style="background: #111111; color: white; font-size: 13px; font-weight: 700; padding: 12px 0; border-radius: 100px; border: none; cursor: pointer; width: 100%; transition: all 0.2s;">Secondary Action</button>
+        <p style="font-size: 13px; color: #71717A; margin-top: 16px;">Black · 13px · Weight 700</p>
+      </div>
+      <div>
+        <button style="background: transparent; color: #4F46E5; border: 2px solid #4F46E5; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 10px; cursor: pointer; transition: all 0.2s;">Tertiary</button>
+        <p style="font-size: 13px; color: #71717A; margin-top: 16px;">Outlined · Indigo</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section style="margin-bottom: 80px;">
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Cards</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+      <div style="background: white; border: 1px solid #E4E4E7; border-radius: 18px; padding: 32px 24px; transition: all 0.25s; cursor: pointer;" style-hover="box-shadow: 0 12px 40px rgba(0,0,0,0.13); transform: translateY(-4px);">
+        <div style="width: 40px; height: 40px; background: #F0FDF4; border-radius: 10px; margin-bottom: 16px;"></div>
+        <h3 style="font-size: 15px; font-weight: 800; color: #09090B; margin-bottom: 12px;">Light Card</h3>
+        <p style="font-size: 14px; color: #71717A; line-height: 1.6;">White background with subtle border. Hover effect lifts the card with shadow.</p>
+      </div>
+      <div style="background: #09090B; border-radius: 18px; padding: 32px 24px; transition: all 0.25s; cursor: pointer;" style-hover="box-shadow: 0 12px 40px rgba(0,0,0,0.13); transform: translateY(-4px);">
+        <div style="width: 40px; height: 40px; background: rgba(79,70,229,.15); border: 1px solid rgba(79,70,229,.25); border-radius: 10px; margin-bottom: 16px;"></div>
+        <h3 style="font-size: 15px; font-weight: 800; color: white; margin-bottom: 12px;">Dark Card</h3>
+        <p style="font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.6;">Dark background for contrast. Works with any accent color.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYOUT GRID -->
+  <section style="margin-bottom: 80px;">
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Grid Systems</h2>
+    <div style="display: grid; gap: 40px;">
+      <div>
+        <p style="font-size: 14px; font-weight: 600; color: #71717A; margin-bottom: 16px;">2-Column Grid (gap: 18px)</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">Column 1</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">Column 2</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size: 14px; font-weight: 600; color: #71717A; margin-bottom: 16px;">3-Column Grid (gap: 18px)</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;">
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">Column 1</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">Column 2</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">Column 3</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size: 14px; font-weight: 600; color: #71717A; margin-bottom: 16px;">4-Column Grid (gap: 18px)</p>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">C1</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">C2</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">C3</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 12px; text-align: center; color: #71717A;">C4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section>
+    <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: #09090B;">Badges & Pills</h2>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <div style="border: 1px solid rgba(255,255,255,.1); border-radius: 100px; padding: 6px 18px; background: rgba(79,70,229,.08); display: inline-flex; align-items: center; gap: 8px;">
+        <span style="width: 7px; height: 7px; background: #25D366; border-radius: 50%; animation: blink 2s infinite;"></span>
+        <span style="font-size: 13px; font-weight: 500; color: #4F46E5;">Status Active</span>
+      </div>
+      <div style="border: 1px solid #E4E4E7; border-radius: 100px; padding: 6px 18px; background: white; display: inline-flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #09090B;">Feature Tag</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;auto&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
