@@ -74,7 +74,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
 </helmet>
 
 <!-- ===== NAVBAR ===== -->
-<header data-screen-label="Navbar" style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--color-gray-border)">
+<header data-screen-label="Navbar" style="position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--color-gray-border)">
   <div style="max-width:1120px;margin:0 auto;padding:14px var(--spacing-lg);display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-lg)">
     <a href="#inicio" style="display:flex;align-items:center;gap:9px;color:#0F1D2E">
       <img src="assets/workbots-logo.png" alt="WorkBots" style="height:38px;width:auto;display:block">
@@ -83,22 +83,19 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
       <a href="#agentes" style="color:var(--color-gray-text)" style-hover="color:#0F1D2E">Agentes IA</a>
       <a href="#como-funciona" style="color:var(--color-gray-text)" style-hover="color:#0F1D2E">Cómo funciona</a>
       
-      <a href="#faq" style="color:var(--color-gray-text)" style-hover="color:#0F1D2E">FAQ</a>
       <a href="#contacto" style="background:var(--color-primary);color:var(--color-white);padding:12px 24px;border-radius:var(--radius-md);font-weight:600;transition:var(--transition)" style-hover="background:var(--color-primary-hover)">Hablemos →</a>
     </nav>
   </div>
 </header>
+<div style="height:70px"></div>
 
 <!-- ===== HERO ===== -->
 <section id="inicio" data-screen-label="Hero" style="position:relative;overflow:hidden;background:var(--color-light-bg);border-bottom:1px solid var(--color-gray-border);padding:clamp(48px,7vw,84px) var(--spacing-lg) clamp(40px,6vw,72px)" style-before="content:'';position:absolute;width:640px;height:640px;top:-260px;right:-200px;border-radius:50%;background:radial-gradient(circle,rgba(79,70,229,.10),transparent 70%);pointer-events:none">
   <div style="position:relative;z-index:1;max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:var(--spacing-6xl);align-items:center">
     <div style="flex:1 1 440px;min-width:300px">
-      <div style="display:inline-flex;align-items:center;gap:var(--spacing-xs);background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--color-accent-green);margin-bottom:22px">
-        <span style="width:7px;height:7px;border-radius:50%;background:var(--color-accent-green);animation:blink 2s infinite"></span>
-        Tu próximo equipo ya vive en tu <span style="color:var(--color-accent-green)">WhatsApp</span>
-      </div>
-      <h1 style="margin:0 0 28px;font-size:clamp(28px,4.2vw,46px);letter-spacing:-0.03em;line-height:1.15;color:#0F1D2E">Agentes IA por <span style="color:var(--color-accent-green)">WhatsApp</span> para tus clientes y para tu gente</h1>
-      <p style="margin:0 0 28px;font-size:clamp(16px,2vw,18px);line-height:1.6;color:var(--color-gray-text);max-width:560px">Ventas, servicio al cliente, agendamiento y HR - <strong>24/7, sin ampliar tu nómina.</strong> <strong>Sin apps nuevas ni fricción de adopción:</strong> tus Agentes IA trabajan en el canal que tus clientes y tu equipo ya usan.</p>
+      
+      <h1 style="margin:0 0 28px;font-size:clamp(28px,4.2vw,46px);letter-spacing:-0.03em;line-height:1.15;color:#0F1D2E">Agentes IA por <span style="color:var(--color-accent-green)">{{ canalActual }}</span> para tus clientes y para tu gente</h1>
+      <p style="margin:0 0 28px;font-size:clamp(16px,2vw,18px);line-height:1.6;color:var(--color-gray-text);max-width:560px">Ventas, servicio al cliente, agendamiento y HR - <strong>24/7, sin ampliar tu nómina.</strong> <strong>Sin apps nuevas ni fricción de adopción:</strong> tus Agentes IA trabajan <strong>en el canal que tus clientes y tu equipo ya usan.</strong></p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:18px">
         <a href="#contacto" style="background:var(--color-primary);color:var(--color-white);padding:15px 32px;border-radius:var(--radius-md);font-weight:700;font-size:16px;box-shadow:0 0 0 1px rgba(79,70,229,.4), 0 4px 24px rgba(79,70,229,.25);transition:var(--transition)" style-hover="background:var(--color-primary-hover);transform:translateY(-1px)">Hablemos →</a>
         <a href="#agentes" style="padding:15px 24px;border-radius:var(--radius-md);font-weight:600;font-size:16px;color:#0F1D2E;border:1.5px solid var(--color-gray-border);background:var(--color-white);transition:var(--transition)" style-hover="border-color:#0F1D2E;transform:translateY(-1px)">Ver el catálogo</a>
@@ -139,7 +136,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   <div style="max-width:1120px;margin:0 auto">
     <div style="max-width:640px;margin-bottom:40px">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--color-accent-green);text-transform:uppercase;margin-bottom:10px">Catálogo</div>
-      <h2 style="margin:0 0 14px;font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;color:#0F1D2E">Tu catálogo de Agentes IA que viven en <span style="color:var(--color-accent-green)">WhatsApp</span></h2>
+      <h2 style="margin:0 0 14px;font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;color:#0F1D2E">Tu catálogo de Agentes IA que viven en <span style="color:var(--color-accent-green)">{{ canalActual }}</span></h2>
       <p style="margin:0;font-size:16px;line-height:1.6;color:var(--color-gray-text);text-wrap:pretty">Cada agente cubre un frente de tu operación: desde la primera conversación con un cliente hasta la gestión de tu equipo interno.&nbsp;</p>
     </div>
 
@@ -277,8 +274,14 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
 <sc-if value="{{ mostrarBarra }}" hint-placeholder-val="{{ true }}">
 <section data-screen-label="Barra de confianza" style="background:var(--color-white);border-bottom:1px solid var(--color-gray-border);padding:26px var(--spacing-lg)">
   <div style="max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 34px">
-    
     <span style="font-size:13px;color:#8A97A5;font-weight:500">Se integra con</span>
+    <div style="display:flex;align-items:center;gap:16px">
+      <img src="assets/icon-whatsapp.png" alt="WhatsApp" title="WhatsApp" style="width:26px;height:26px;border-radius:6px;object-fit:contain">
+      <img src="assets/icon-teams.png" alt="Microsoft Teams" title="Microsoft Teams" style="width:26px;height:26px;border-radius:6px;object-fit:contain">
+      <img src="assets/icon-slack.png" alt="Slack" title="Slack" style="width:26px;height:26px;border-radius:6px;object-fit:contain">
+      <img src="assets/icon-googlechat.png" alt="Google Chat" title="Google Chat" style="width:26px;height:26px;border-radius:6px;object-fit:contain">
+    </div>
+    <span style="width:1px;height:24px;background:var(--color-gray-border)"></span>
     <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
       <span style="font-size:13px;font-weight:600;color:var(--color-gray-text);border:1px solid var(--color-gray-border);border-radius:var(--radius-md);padding:7px 14px">CRMs</span>
       <span style="font-size:13px;font-weight:600;color:var(--color-gray-text);border:1px solid var(--color-gray-border);border-radius:var(--radius-md);padding:7px 14px">Calendarios</span>
@@ -296,7 +299,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
     <div style="flex:1 1 460px;min-width:300px">
       <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--color-accent-green);text-transform:uppercase;margin-bottom:10px">Operación completa</div>
       <h2 style="margin:0 0 16px;font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;color:var(--color-white);text-wrap:pretty">Automatiza desde la venta hasta la gestión de tu equipo</h2>
-      <p style="margin:0 0 22px;font-size:16px;line-height:1.65;color:var(--color-white-op-65);text-wrap:pretty">WorkBots automatiza la parte importante de la operación del negocio, todo dentro de un mismo chat de <span style="color:var(--color-accent-green)">WhatsApp</span>.</p>
+      <p style="margin:0 0 22px;font-size:16px;line-height:1.65;color:var(--color-white-op-65);text-wrap:pretty">WorkBots automatiza la parte importante de la operación del negocio, todo dentro de un mismo chat de <span style="color:var(--color-accent-green)">{{ canalActual }}</span>.</p>
       
     </div>
     <div style="flex:1 1 320px;min-width:280px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -345,6 +348,18 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   </div>
 </section>
 
+<!-- ===== DEMO ===== -->
+<section id="demo" data-screen-label="Demo" style="background:var(--color-white);padding:28px var(--spacing-lg) clamp(56px,8vw,88px);scroll-margin-top:70px">
+  <div style="max-width:1120px;margin:0 auto;text-align:center">
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--color-accent-green);text-transform:uppercase;margin-bottom:10px">Demo</div>
+    <h2 style="margin:0 0 14px;font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;color:#0F1D2E">Míralo en acción</h2>
+    <p style="margin:0 auto 32px;max-width:560px;font-size:16px;line-height:1.6;color:var(--color-gray-text)">Conoce el caso de un Agente IA de WorkBots que mide el clima organizacional</p>
+    <div style="position:relative;width:100%;max-width:960px;margin:0 auto;aspect-ratio:16/9;border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 20px 60px rgba(15,29,46,.15);border:1px solid var(--color-gray-border)">
+      <iframe src="https://drive.google.com/file/d/1RsEq7U-_Y7Nm3NkyQyQR6VXka4b_wUnm/preview" style="width:100%;height:100%;border:none;" allow="autoplay"></iframe>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CÓMO FUNCIONA ===== -->
 <section id="como-funciona" data-screen-label="Cómo funciona" style="background:var(--color-light-bg);border-top:1px solid var(--color-gray-border);padding:clamp(56px,8vw,88px) var(--spacing-lg);scroll-margin-top:70px">
   <div style="max-width:1120px;margin:0 auto">
@@ -367,40 +382,13 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
       <div style="background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:var(--radius-xl);padding:24px">
         <div style="font-size:11px;font-weight:700;color:var(--color-accent-green);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.15em">Paso 3</div>
         <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;color:#0F1D2E">Lo implementamos</h3>
-        <p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-gray-text)">El agente entra a operar en tu <span style="color:var(--color-accent-green)">WhatsApp</span>, conectado a tus herramientas.</p>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-gray-text)">El agente entra a operar en tu <span style="color:var(--color-accent-green)">{{ canalActual }}</span>, conectado a tus herramientas.</p>
       </div>
       <div style="background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:var(--radius-xl);padding:24px">
         <div style="font-size:11px;font-weight:700;color:var(--color-accent-green);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.15em">Paso 4</div>
         <h3 style="margin:0 0 8px;font-size:17px;font-weight:700;color:#0F1D2E">Mides resultados</h3>
-        <p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-gray-text)">Desde el primer mes ves conversaciones atendidas, citas, cobros y más.</p>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:var(--color-gray-text)">Desde el primer mes ves conversaciones atendidas, citas, cobros, etc.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FAQ ===== -->
-<section id="faq" data-screen-label="FAQ" style="background:var(--color-white);padding:clamp(56px,8vw,88px) var(--spacing-lg);scroll-margin-top:70px">
-  <div style="max-width:760px;margin:0 auto">
-    <div style="margin-bottom:34px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--color-accent-green);text-transform:uppercase;margin-bottom:10px">FAQ</div>
-      <h2 style="margin:0;font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.02em;color:#0F1D2E">Preguntas frecuentes</h2>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      
-      <details style="background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:var(--radius-xl);padding:0 20px">
-        <summary style="cursor:pointer;list-style:none;padding:18px 0;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#0F1D2E">¿Cuánto tarda la implementación?<span style="color:var(--color-primary);font-size:20px;font-weight:400;flex:none">+</span></summary>
-        <p style="margin:0;padding:0 0 18px;font-size:14px;line-height:1.6;color:var(--color-gray-text)">Depende de la complejidad de los flujos y las integraciones. Tras el levantamiento del requerimiento definimos contigo un cronograma; los casos típicos entran a operar en pocas semanas.</p>
-      </details>
-      <details style="background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:var(--radius-xl);padding:0 20px">
-        <summary style="cursor:pointer;list-style:none;padding:18px 0;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#0F1D2E">¿Se integra con mi CRM, ATS o calendario?<span style="color:var(--color-primary);font-size:20px;font-weight:400;flex:none">+</span></summary>
-        <p style="margin:0;padding:0 0 18px;font-size:14px;line-height:1.6;color:var(--color-gray-text)">Depende del agente: los conectamos a las herramientas que ya usas — CRM, ATS, calendarios, hojas de cálculo y pasarelas de pago. En el levantamiento validamos qué integraciones aplican a tu caso. Para algunos agentes, en cambio, usas una plataforma construida por nosotros.</p>
-      </details>
-      
-      
-      <details style="background:var(--color-white);border:1px solid var(--color-gray-border);border-radius:var(--radius-xl);padding:0 20px">
-        <summary style="cursor:pointer;list-style:none;padding:18px 0;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#0F1D2E">¿Cómo empiezo?<span style="color:var(--color-primary);font-size:20px;font-weight:400;flex:none">+</span></summary>
-        <p style="margin:0;padding:0 0 18px;font-size:14px;line-height:1.6;color:var(--color-gray-text)">Deja los datos de tu organización en el formulario y nuestro equipo te contacta para levantar tu requerimiento. A partir de ahí definimos juntos el agente que tu operación necesita.</p>
-      </details>
     </div>
   </div>
 </section>
@@ -411,7 +399,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
     
     <h2 style="margin:0 0 16px;font-size:clamp(32px,5vw,48px);letter-spacing:-0.03em;line-height:1.12;color:var(--color-white);text-wrap:pretty">Hablemos de tu operación</h2>
     <p style="margin:0 0 32px;font-size:16px;line-height:1.65;color:var(--color-white-op-65);text-wrap:pretty">Completa el formulario y nuestro equipo se pondrá en contacto contigo para entender tu operación y proponerte el Agente IA adecuado.</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd2kCSpHBjXhnLLZSko61QJcIPrJqZ_4zu_q1fiCWaCAuxqqQ/viewform?usp=dialog" target="_blank" rel="noopener" style="display:inline-block;background:var(--color-white);color:var(--color-primary);border:none;border-radius:999px;padding:16px 40px;font-size:17px;font-weight:700;cursor:pointer;transition:var(--transition);text-decoration:none" style-hover="background:var(--color-white-op-8);transform:translateY(-2px)">Completar formulario →</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd2kCSpHBjXhnLLZSko61QJcIPrJqZ_4zu_q1fiCWaCAuxqqQ/viewform?usp=publish-editor" target="_blank" rel="noopener" style="display:inline-block;background:var(--color-white);color:var(--color-primary);border:none;border-radius:999px;padding:16px 40px;font-size:17px;font-weight:700;cursor:pointer;transition:var(--transition);text-decoration:none" style-hover="background:var(--color-white-op-8);transform:translateY(-2px)">Completar formulario →</a>
     
   </div>
 </section>
@@ -423,14 +411,13 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
         <img src="assets/workbots-logo-white.png" alt="WorkBots" style="height:34px;width:auto;display:block">
       </div>
-      <p style="margin:0;font-size:13px;line-height:1.6;color:#7D8B99">Agentes IA que viven en tu <span style="color:var(--color-accent-green)">WhatsApp</span>: para tus clientes y para tu gente.</p>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:#7D8B99">Agentes IA que viven en tu <span style="color:var(--color-accent-green)">{{ canalActual }}</span>: para tus clientes y para tu gente.</p>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:40px">
       <div style="display:flex;flex-direction:column;gap:9px;font-size:14px">
         <span style="font-weight:700;color:var(--color-white);font-size:13px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Explora</span>
         <a href="#agentes" style="color:#7D8B99;transition:var(--transition)" style-hover="color:var(--color-white)">Agentes IA</a>
         <a href="#como-funciona" style="color:#7D8B99;transition:var(--transition)" style-hover="color:var(--color-white)">Cómo funciona</a>
-        <a href="#faq" style="color:#7D8B99;transition:var(--transition)" style-hover="color:var(--color-white)">FAQ</a>
         
       </div>
       <div style="display:flex;flex-direction:column;gap:9px;font-size:14px">
@@ -472,7 +459,18 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"botonFlotante":{"editor":"boolean","default":true,"tsType":"boolean","section":"Comportamiento"},"mostrarBarraConfianza":{"editor":"boolean","default":true,"tsType":"boolean","section":"Comportamiento"},"comercialTitulo":{"editor":"text","default":"Asesora Comercial","section":"Catálogo de Agentes"},"comercialSubtitulo":{"editor":"text","default":"Para empresas que venden por WhatsApp y pierden oportunidades por falta de seguimiento","section":"Catálogo de Agentes"},"recepcionistaTitulo":{"editor":"text","default":"Recepcionista","section":"Catálogo de Agentes"},"recepcionistaSubtitulo":{"editor":"text","default":"Para negocios que viven de citas y reservas","section":"Catálogo de Agentes"},"soporteTitulo":{"editor":"text","default":"Soporte y Atención al Cliente","section":"Catálogo de Agentes"},"soporteSubtitulo":{"editor":"text","default":"Para empresas que necesitan atención 24/7 y quieren retener clientes","section":"Catálogo de Agentes"},"cobranzaTitulo":{"editor":"text","default":"Especialista de Cobranza","section":"Catálogo de Agentes"},"cobranzaSubtitulo":{"editor":"text","default":"Para empresas que necesitan recuperar cartera sin fricción","section":"Catálogo de Agentes"}}'>
 class Component extends DCLogic {
-  state = { nombre: '', empresa: '', cargo: '', whatsapp: '', tamano: '', interes: '', enviado: false };
+  state = { nombre: '', empresa: '', cargo: '', whatsapp: '', tamano: '', interes: '', enviado: false, canalIdx: 0 };
+  canales = ['WhatsApp', 'Teams', 'Slack', 'Google Chat'];
+  canalIconos = ['assets/icon-whatsapp.png', 'assets/icon-teams.png', 'assets/icon-slack.png', 'assets/icon-googlechat.png'];
+
+  componentDidMount() {
+    this._canalTimer = setInterval(() => {
+      this.setState(s => ({ canalIdx: (s.canalIdx + 1) % this.canales.length }));
+    }, 2200);
+  }
+  componentWillUnmount() {
+    clearInterval(this._canalTimer);
+  }
 
   sel(v) {
     this.setState({ interes: v, enviado: false });
@@ -505,6 +503,8 @@ class Component extends DCLogic {
       enviar: (e) => { e.preventDefault(); this.setState({ enviado: true }); },
       flotante: p.botonFlotante ?? true,
       mostrarBarra: p.mostrarBarraConfianza ?? true,
+      canalActual: this.canales[this.state.canalIdx],
+      canalIcono: this.canalIconos[this.state.canalIdx],
       comercialTitulo: p.comercialTitulo ?? 'Asesora Comercial',
       comercialSubtitulo: p.comercialSubtitulo ?? 'Para empresas que venden por WhatsApp y pierden oportunidades por falta de seguimiento',
       recepcionistaTitulo: p.recepcionistaTitulo ?? 'Recepcionista',
